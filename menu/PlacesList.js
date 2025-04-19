@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { View, FlatList, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, FlatList, Image, Text, StyleSheet, TouchableOpacity, ImageBackground ,ScrollView } from "react-native";
 import { ProfileContext } from '../components/ProfileContext';
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native'; // ✅ อย่าลืมนำเข้า
@@ -32,48 +32,47 @@ const YourComponent = () => {
 const mainPlaces = [
   {
     id: "1",
-    title: "ศาลเจ้าพ่อเสือ",
     description: "บูชาเรื่องการงาน",
     distance: "17 กม.",
     images: [require("../assets/ศาลเจ้าพ่อเสือ.jpg")],
+    category: "WorkPlaces" // กำหนดหมวดหมู่
+
   },
   {
     id: "2",
-    title: "พระแม่ลักษมี",
     description: "บูชาเรื่องความรัก",
     distance: "2.4 กม.",
     images: [require("../assets/พระแม่ลักษมี.jpg")],
+    category: "LovePlaces" // กำหนดหมวดหมู่
+
   },
   {
     id: "3",
-    title: "วัดแขก",
-    description: "วัดฮินดูศักดิ์สิทธิ์",
+    description: "บูชาเรื่องการเงิน",
     distance: "8 กม.",
     images: [require("../assets/วัดแขก.jpg")],
   },
+  {
+    id: "4",
+    description: "บูชาเรื่องสุขภาพ",
+    distance: "8 กม.",
+    images: [require("../assets/หลวงพ่อสุขสบาย.png")],
+    category: "HealthPlaces" // กำหนดหมวดหมู่
+
+  },
 ];
 
-// ✅ สร้าง Card สำหรับสถานที่หลัก
-const PlaceCard = ({ place }) => {
-  return (
-    <TouchableOpacity style={styles.card}>
-      <Image source={place.images[0]} style={styles.image} />
-      <View style={styles.cardContent}>
-        <Text style={styles.title}>{place.title}</Text>
-        <Text style={styles.description}>{place.description}</Text>
-        <Text style={styles.distance}>{place.distance}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-// ✅ ตัวหลักของแอป (รับ `places` จาก Google API)
+// ตัวหลักของแอป
 const PlacesList = ({ places }) => {
-  const navigation = useNavigation(); // ✅ ใช้งาน navigation
+  const navigation = useNavigation(); // ใช้งาน navigation
 
   const { profile } = useContext(ProfileContext);
   const route = useRoute();
   const status = route.params?.status || "-";
+
+  const goToCategoryPage = (category) => {
+    navigation.navigate(category); // ไปที่หน้า category ที่ต้องการ
+  };
 
   const tripMembers = [
     {
@@ -85,11 +84,22 @@ const PlacesList = ({ places }) => {
   ];
 
   return (
+    <ScrollView style={styles.container}>
     <View style={styles.container}>
       <FlatList
         data={mainPlaces}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <PlaceCard place={item} />}
+        renderItem={({ item }) => (
+          <TouchableOpacity 
+            style={styles.card} 
+            onPress={() => goToCategoryPage(item.category)} // กดแล้วไปหน้าหมวดหมู่ที่เลือก
+          >
+            <Image source={item.images[0]} style={styles.image} />
+            <View style={styles.cardContent}>
+              <Text style={styles.title}>{item.description}</Text>
+            </View>
+          </TouchableOpacity>
+        )}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
@@ -98,20 +108,21 @@ const PlacesList = ({ places }) => {
       <View style={styles.divider} />
       <Text style={styles.sectionTitle}>🢑 Trip</Text>
       <TouchableOpacity onPress={() => navigation.navigate("RoomTour")}>
-      <FlatList
-        data={tripMembers}
-        horizontal
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.tripCard}>
-            <Image source={item.avatar} style={styles.avatar} />
-            <Text style={styles.tripName}>{item.name}</Text>
-            <Text style={styles.tripStatus}>{item.status}</Text>
-          </View>
-        )}
-        showsHorizontalScrollIndicator={false}
-      />
-    </TouchableOpacity>
+        <FlatList
+          data={tripMembers}
+          horizontal
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.tripCard}>
+              <Image source={item.avatar} style={styles.avatar} />
+              <Text style={styles.tripName}>{item.name}</Text>
+              <Text style={styles.tripStatus}>{item.status}</Text>
+            </View>
+          )}
+          showsHorizontalScrollIndicator={false}
+        />
+      </TouchableOpacity>
+      
 
       <Text style={styles.sectionTitle}>🏠 สถานที่ใกล้ฉัน</Text>
       <FlatList
@@ -126,6 +137,7 @@ const PlacesList = ({ places }) => {
         showsVerticalScrollIndicator={false}
       />
     </View>
+    </ScrollView>
   );
 };
 
@@ -164,11 +176,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
   },
-  description: {
-    fontSize: 14,
-    color: "gray",
-    marginBottom: 5,
-  },
   distance: {
     fontSize: 14,
     color: "#007AFF",
@@ -178,7 +185,6 @@ const styles = StyleSheet.create({
     height: 2,
     width: 500,
     backgroundColor: "#ccc",
-    marginTop: -150,
     marginBottom: 10,
   },
   sectionTitle: {
@@ -231,6 +237,36 @@ const styles = StyleSheet.create({
   tripStatus: {
     fontSize: 12,
     textAlign: "center",
+  },
+  cardContainer: {
+    width: 300,
+    height: 300,
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  cardBackground: {
+    borderRadius: 15,
+    opacity: 0.6, // ทำให้รูปเบลอเล็กน้อยเพื่อให้ข้อความอ่านง่าย
+  },
+  cardTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 20,
+  },
+  luckyButton: {
+    backgroundColor: "#FFB6C1",
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 30,
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
 

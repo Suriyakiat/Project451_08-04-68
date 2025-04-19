@@ -34,6 +34,18 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import RoomTour from "./comp/RoomTour";
 import Createroom from "./menu/Createroom";
 
+import LovePlaces from "./components/LovePlaces";
+import Review from "./components/Review";
+import PlaceDetail from "./components/PlaceDetail";
+
+import Review_health from "./components/Review_health";
+import PlaceDetail_health from "./components/PlaceDetail_health";
+import HealthPlaces from "./components/HealthPlaces";
+
+import PlaceDetail_work from "./components/PlaceDetail_work";
+import Review_work from "./components/Review_work";
+import WorkPlaces from "./components/WorkPlaces";
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -199,13 +211,48 @@ export default function App() {
                 component={SelectProfile}
                 options={{ headerShown: false }}
               />
-              <Stack.Screen name="RoomTour" component={RoomTour} />
+            <Stack.Screen name="LovePlaces" 
+            component={LovePlaces} />
+            <Stack.Screen
+              name="PlaceDetail"
+              component={PlaceDetail}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Review"
+              component={Review}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="HealthPlaces" component={HealthPlaces} />
+            <Stack.Screen
+              name="PlaceDetail_health"
+              component={PlaceDetail_health}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Review_health"
+              component={Review_health}
+              options={{ headerShown: false }}
+            />
+              <Stack.Screen name="RoomTour" 
+              component={RoomTour} />
 
               <Stack.Screen
                 name="EditField"
                 component={EditField}
                 options={{ headerShown: false }}
               />
+              <Stack.Screen name="WorkPlaces" component={WorkPlaces} />
+            <Stack.Screen
+              name="PlaceDetail_work"
+              component={PlaceDetail_work}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Review_work"
+              component={Review_work}
+              options={{ headerShown: false }}
+            />
             </Stack.Navigator>
           </NavigationContainer>
         </ProfileProvider>
