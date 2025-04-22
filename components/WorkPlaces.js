@@ -3,8 +3,6 @@ import { ScrollView, StyleSheet, Text } from "react-native";
 import PlaceCard from "./PlaceCard_work";
 import { PLACES } from '../data/places_work';
 
-
-
 const WorkPlaces = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>

@@ -53,6 +53,10 @@ import ProductListScreen from "./components/ProductListScreen";
 import ProductDetailScreen from "./components/ProductDetailScreen";
 import PaymentScreen from "./components/PaymentScreen";
 
+import FinancePlaces from "./components/FinancePlaces";
+import FinanceReview from "./components/FinanceReview";
+import FinanceDetail from "./components/FinanceDetail";
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -259,6 +263,17 @@ export default function App() {
                 component={Review_work}
                 options={{ headerShown: false }}
               />
+              <Stack.Screen name="FinancePlaces" component={FinancePlaces} />
+              <Stack.Screen
+                name="FinanceDetail"
+                component={FinanceDetail}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="FinanceReview"
+                component={FinanceReview}
+                options={{ headerShown: false }}
+              />
               <Stack.Screen
                 name="Shop_Home"
                 component={Shop_homeScreen}
@@ -289,6 +304,7 @@ export default function App() {
                 component={PaymentScreen}
                 options={{ headerShown: false }}
               />
+              
             </Stack.Navigator>
           </NavigationContainer>
         </ProfileProvider>

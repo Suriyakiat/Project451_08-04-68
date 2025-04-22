@@ -48,7 +48,8 @@ const mainPlaces = [
     id: "3",
     description: "บูชาเรื่องการเงิน",
     distance: "8 กม.",
-    images: [require("../assets/วัดแขก.jpg")],
+    images: [require("../assets/วัดแขก.jpg")],    
+    category: "FinancePlaces",
   },
   {
     id: "4",
