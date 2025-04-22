@@ -35,16 +35,14 @@ const mainPlaces = [
     description: "บูชาเรื่องการงาน",
     distance: "17 กม.",
     images: [require("../assets/ศาลเจ้าพ่อเสือ.jpg")],
-    category: "WorkPlaces" // กำหนดหมวดหมู่
-
+    category: "WorkPlaces", // กำหนดหมวดหมู่
   },
   {
     id: "2",
     description: "บูชาเรื่องความรัก",
     distance: "2.4 กม.",
     images: [require("../assets/พระแม่ลักษมี.jpg")],
-    category: "LovePlaces" // กำหนดหมวดหมู่
-
+    category: "LovePlaces", // กำหนดหมวดหมู่
   },
   {
     id: "3",
@@ -57,15 +55,13 @@ const mainPlaces = [
     description: "บูชาเรื่องสุขภาพ",
     distance: "8 กม.",
     images: [require("../assets/หลวงพ่อสุขสบาย.png")],
-    category: "HealthPlaces" // กำหนดหมวดหมู่
-
+    category: "HealthPlaces", // กำหนดหมวดหมู่
   },
 ];
 
 // ตัวหลักของแอป
 const PlacesList = ({ places }) => {
   const navigation = useNavigation(); // ใช้งาน navigation
-
   const { profile } = useContext(ProfileContext);
   const route = useRoute();
   const status = route.params?.status || "-";
@@ -85,12 +81,11 @@ const PlacesList = ({ places }) => {
 
   return (
     <ScrollView style={styles.container}>
-    <View style={styles.container}>
-      <FlatList
-        data={mainPlaces}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
+      {/* FlatList ที่ใช้แสดงสถานที่หลัก */}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.listContainer}>
+        {mainPlaces.map((item) => (
           <TouchableOpacity 
+            key={item.id}
             style={styles.card} 
             onPress={() => goToCategoryPage(item.category)} // กดแล้วไปหน้าหมวดหมู่ที่เลือก
           >
@@ -99,44 +94,32 @@ const PlacesList = ({ places }) => {
               <Text style={styles.title}>{item.description}</Text>
             </View>
           </TouchableOpacity>
-        )}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.listContainer}
-      />
+        ))}
+      </ScrollView>
 
       <View style={styles.divider} />
       <Text style={styles.sectionTitle}>🢑 Trip</Text>
       <TouchableOpacity onPress={() => navigation.navigate("RoomTour")}>
-        <FlatList
-          data={tripMembers}
-          horizontal
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.tripCard}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {tripMembers.map((item) => (
+            <View key={item.id} style={styles.tripCard}>
               <Image source={item.avatar} style={styles.avatar} />
               <Text style={styles.tripName}>{item.name}</Text>
               <Text style={styles.tripStatus}>{item.status}</Text>
             </View>
-          )}
-          showsHorizontalScrollIndicator={false}
-        />
+          ))}
+        </ScrollView>
       </TouchableOpacity>
-      
 
       <Text style={styles.sectionTitle}>🏠 สถานที่ใกล้ฉัน</Text>
-      <FlatList
-        data={places}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity style={styles.nearbyCard}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {places.map((item, index) => (
+          <TouchableOpacity key={index} style={styles.nearbyCard}>
             <Text style={styles.nearbyTitle}>{item.name}</Text>
             <Text style={styles.nearbyAddress}>{item.vicinity}</Text>
           </TouchableOpacity>
-        )}
-        showsVerticalScrollIndicator={false}
-      />
-    </View>
+        ))}
+      </ScrollView>
     </ScrollView>
   );
 };
@@ -176,22 +159,17 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
   },
-  distance: {
-    fontSize: 14,
-    color: "#007AFF",
+  sectionTitle: {
+    fontSize: 18,
     fontWeight: "bold",
+    marginBottom: 10,
+    marginTop: 10,
   },
   divider: {
     height: 2,
     width: 500,
     backgroundColor: "#ccc",
     marginBottom: 10,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-    marginTop: 10,
   },
   nearbyCard: {
     backgroundColor: "#fff",
@@ -237,36 +215,6 @@ const styles = StyleSheet.create({
   tripStatus: {
     fontSize: 12,
     textAlign: "center",
-  },
-  cardContainer: {
-    width: 300,
-    height: 300,
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  cardBackground: {
-    borderRadius: 15,
-    opacity: 0.6, // ทำให้รูปเบลอเล็กน้อยเพื่อให้ข้อความอ่านง่าย
-  },
-  cardTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#fff",
-    marginBottom: 20,
-  },
-  luckyButton: {
-    backgroundColor: "#FFB6C1",
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 30,
-    marginBottom: 10,
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
   },
 });
 

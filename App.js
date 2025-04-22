@@ -46,6 +46,13 @@ import PlaceDetail_work from "./components/PlaceDetail_work";
 import Review_work from "./components/Review_work";
 import WorkPlaces from "./components/WorkPlaces";
 
+import Shop_homeScreen from "./components/Shop_homeScreen";
+import StoreDetailScreen from "./components/StoreDetailScreen";
+import FlowerShop from "./components/Flowershop";
+import ProductListScreen from "./components/ProductListScreen";
+import ProductDetailScreen from "./components/ProductDetailScreen";
+import PaymentScreen from "./components/PaymentScreen";
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -168,6 +175,9 @@ function MyTabs() {
 // ✅ Main App
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const LoginScreenWrapper = (props) => (
+    <LoginScreen {...props} onLogin={() => setIsLoggedIn(true)} />
+  );
 
   return (
     <SafeAreaProvider>
@@ -179,9 +189,7 @@ export default function App() {
 
               <Stack.Screen
                 name="Login"
-                component={(props) => (
-                  <LoginScreen {...props} onLogin={() => setIsLoggedIn(true)} />
-                )}
+                component={LoginScreenWrapper} // ใช้ `LoginScreenWrapper` ที่สร้างขึ้น
               />
 
               <Stack.Screen name="Signup" component={SignupScreen} />
@@ -211,31 +219,29 @@ export default function App() {
                 component={SelectProfile}
                 options={{ headerShown: false }}
               />
-            <Stack.Screen name="LovePlaces" 
-            component={LovePlaces} />
-            <Stack.Screen
-              name="PlaceDetail"
-              component={PlaceDetail}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Review"
-              component={Review}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen name="HealthPlaces" component={HealthPlaces} />
-            <Stack.Screen
-              name="PlaceDetail_health"
-              component={PlaceDetail_health}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Review_health"
-              component={Review_health}
-              options={{ headerShown: false }}
-            />
-              <Stack.Screen name="RoomTour" 
-              component={RoomTour} />
+              <Stack.Screen name="LovePlaces" component={LovePlaces} />
+              <Stack.Screen
+                name="PlaceDetail"
+                component={PlaceDetail}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Review"
+                component={Review}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen name="HealthPlaces" component={HealthPlaces} />
+              <Stack.Screen
+                name="PlaceDetail_health"
+                component={PlaceDetail_health}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Review_health"
+                component={Review_health}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen name="RoomTour" component={RoomTour} />
 
               <Stack.Screen
                 name="EditField"
@@ -243,16 +249,46 @@ export default function App() {
                 options={{ headerShown: false }}
               />
               <Stack.Screen name="WorkPlaces" component={WorkPlaces} />
-            <Stack.Screen
-              name="PlaceDetail_work"
-              component={PlaceDetail_work}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Review_work"
-              component={Review_work}
-              options={{ headerShown: false }}
-            />
+              <Stack.Screen
+                name="PlaceDetail_work"
+                component={PlaceDetail_work}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Review_work"
+                component={Review_work}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Shop_Home"
+                component={Shop_homeScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="StoreDetail"
+                component={StoreDetailScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Flowershop"
+                component={FlowerShop}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ProductList"
+                component={ProductListScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ProductDetail"
+                component={ProductDetailScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="PaymentScreen"
+                component={PaymentScreen}
+                options={{ headerShown: false }}
+              />
             </Stack.Navigator>
           </NavigationContainer>
         </ProfileProvider>

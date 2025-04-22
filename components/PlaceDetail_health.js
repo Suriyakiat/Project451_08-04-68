@@ -168,7 +168,7 @@ const PlaceDetail_work = ({ route, navigation }) => {
         <View style={styles.metaRow}> </View>
 
       <Text style={styles.description}>
-        <Icon name="map-pin" type="feather" size={16} /> {place.address}
+        <Icon name="map-pin" type="feather" size={16} /> <Text>{place.address}</Text>
       </Text>
       {place.latitude && place.longitude && (
         <View ref={sectionRefs.map} style={styles.mapContainer}>

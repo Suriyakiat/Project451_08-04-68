@@ -129,7 +129,7 @@ const PlaceDetail = ({ route, navigation }) => {
               if (item.key === "share") {
                 navigation.navigate("SharePage"); // แก้ตรงนี้ไปหน้าต่อไป
               } else if (item.key === "shop") {
-                navigation.navigate("ShopPage"); // แก้ตรงนี้ไปหน้าต่อไป
+                navigation.navigate("Shop_Home"); // แก้ตรงนี้ไปหน้าต่อไป
               } else {
                 scrollToSection(item.key);
               }
@@ -168,7 +168,7 @@ const PlaceDetail = ({ route, navigation }) => {
         <View style={styles.metaRow}> </View>
 
       <Text style={styles.description}>
-        <Icon name="map-pin" type="feather" size={16} /> {place.address}
+        <Icon name="map-pin" type="feather" size={16} /> <Text>{place.address}</Text>
       </Text>
       {place.latitude && place.longitude && (
         <View ref={sectionRefs.map} style={styles.mapContainer}>
