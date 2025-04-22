@@ -92,12 +92,6 @@ const FinanceDetail = ({ route, navigation }) => {
     <ScrollView ref={scrollRef} style={styles.container}>
       <View style={styles.headerBar}>
         <Text style={styles.headerText}>{place.name}</Text>
-        <TouchableOpacity
-          style={styles.FinanceReviewButton}
-          onPress={() => navigation.navigate("FinanceReview", { placeId })}
-        >
-          <Text style={styles.FinanceReviewButtonText}>รีวิว</Text>
-        </TouchableOpacity>
       </View>
 
       <View style={styles.metaRow}>
@@ -123,36 +117,66 @@ const FinanceDetail = ({ route, navigation }) => {
       <View style={styles.tagsRow}>
         {[
           { key: "map", label: "เส้นทาง" },
+          { key: "share", label: "แชร์" },
           { key: "offerings", label: "ของบูชา" },
           { key: "mantra", label: "คาถา" },
+          { key: "shop", label: "ร้านค้า" },
         ].map((item, index) => (
           <TouchableOpacity
             key={index}
             style={styles.tagButton}
-            onPress={() => scrollToSection(item.key)}
+            onPress={() => {
+              if (item.key === "share") {
+                navigation.navigate("SharePage"); // แก้ตรงนี้ไปหน้าต่อไป
+              } else if (item.key === "shop") {
+                navigation.navigate("Shop_Home"); // แก้ตรงนี้ไปหน้าต่อไป
+              } else {
+                scrollToSection(item.key);
+              }
+            }}
           >
             <Text style={styles.tagText}>{item.label}</Text>
           </TouchableOpacity>
         ))}
       </View>
+      <View style={styles.metaRow}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.customGallery}
+        >
+          {/* รูปใหญ่ 1 */}
+          <Image source={place.images[0]} style={styles.largeImage} />
 
-      <View style={styles.imagesSection}>
-        <Image source={place.images[0]} style={styles.mainImageLarge} />
-        <View style={styles.grid4Images}>
-          {place.images.slice(1, 5).map((img, index) => (
-            <Image key={index} source={img} style={styles.gridImage} />
-          ))}
-        </View>
+          {/* รูปเล็ก 2 */}
+          <View style={styles.smallImageGroup}>
+            <Image source={place.images[1]} style={styles.smallImage} />
+            <Image source={place.images[2]} style={styles.smallImage} />
+          </View>
+
+          {/* รูปใหญ่ 1 */}
+          <Image source={place.images[3]} style={styles.largeImage} />
+
+          {/* รูปเล็ก 2 */}
+          <View style={styles.smallImageGroup}>
+            <Image source={place.images[4]} style={styles.smallImage} />
+            <Image source={place.images[5]} style={styles.smallImage} />
+            </View>
+        </ScrollView>
       </View>
+        <Text style={styles.description}>{place.description}</Text>
+        <View style={styles.metaRow}> </View>
 
-      <Text style={styles.description}>{place.description}</Text>
       <Text style={styles.description}>
-        <Icon name="map-pin" type="feather" size={16} /> {place.address}
+        <Icon name="map-pin" type="feather" size={16} /> <Text>{place.address}</Text>
       </Text>
-
       {place.latitude && place.longitude && (
         <View ref={sectionRefs.map} style={styles.mapContainer}>
-          <TouchableOpacity onPress={openMap} activeOpacity={0.9} style={{ flex: 1 }}>
+          <TouchableOpacity
+            onPress={openMap}
+            activeOpacity={0.9}
+            style={{ flex: 1 }}
+          >
             <MapView
               provider={PROVIDER_DEFAULT}
               style={styles.mapStyle}
@@ -175,36 +199,89 @@ const FinanceDetail = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
       )}
-
-      {["directions", "buses", "pier", "open", "locationNote"].map((field, idx) => (
+      {["directions", "buses", "pier"].map((field, idx) => (
         <Text key={idx} style={styles.description}>
           <Icon
-            name={{
-              directions: "map",
-              buses: "truck",
-              pier: "navigation",
-              open: "clock",
-              locationNote: "info",
-            }[field]}
+            name={
+              {
+                directions: "map",
+                buses: "truck",
+                pier: "navigation",
+              }[field]
+            }
             type="feather"
             size={16}
-          /> {place[field]}
+          />{" "}
+          {place[field]}
+        </Text>
+      ))}
+      <View style={styles.metaRow}></View>
+      {["open"].map((field, idx) => (
+        <Text key={idx} style={styles.description}>
+          <Icon
+            name={
+              {
+                open: "clock",
+              }[field]
+            }
+            type="feather"
+            size={16}
+          />{" "}
+          {place[field]}
+        </Text>
+      ))}
+      <View style={styles.metaRow}></View>
+
+      {[, "locationNote"].map((field, idx) => (
+        <Text key={idx} style={styles.description}>
+          <Icon
+            name={
+              {
+                locationNote: "info",
+              }[field]
+            }
+            type="feather"
+            size={16}
+          />{" "}
+          {place[field]}
         </Text>
       ))}
 
-      <View ref={sectionRefs.offerings}>
-        <Text style={styles.subTitle}>ของบูชา</Text>
-        {place.offerings.map((item, idx) => (
-          <Text key={idx} style={styles.description}>• {item}</Text>
-        ))}
+      <View style={styles.metaRow}></View>
+      <Text style={styles.sectionTitle}>ของบูชา</Text>
+      {place.offerings.map((item, idx) => (
+        <Text key={idx} style={styles.description}>
+          • {item}
+        </Text>
+      ))}
+      <View style={styles.metaRow}></View>
+
+      <Text style={styles.sectionTitle}>การไหว้</Text>
+      {place.howToPray.map((step, idx) => (
+        <Text key={idx} style={styles.description}>
+          {idx + 1}. {step}
+        </Text>
+      ))}
+      <View style={styles.metaRow}></View>
+
+      <View ref={sectionRefs.mantra} style={styles.centerSection}>
+        <Text style={styles.mantraText}>คาถา</Text>
+        <View style={styles.mantraBox}>
+          {place.mantras.map((line, idx) => (
+            <Text key={idx} style={styles.mantraText}>
+              {line}
+            </Text>
+          ))}
+        </View>
       </View>
 
-      <View ref={sectionRefs.mantra}>
-        <Text style={styles.subTitle}>คาถา</Text>
-        {place.mantras.map((line, idx) => (
-          <Text key={idx} style={styles.description}>{line}</Text>
-        ))}
-      </View>
+      <View style={styles.metaRow}></View>
+      <TouchableOpacity
+        style={styles.reviewButton}
+        onPress={() => navigation.navigate("Review", { placeId })}
+      >
+        <Text style={styles.reviewButtonText}>รีวิว</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -221,21 +298,21 @@ const styles = StyleSheet.create({
     borderColor: "#eee",
   },
   headerText: { fontSize: 24, fontWeight: "bold", color: "#333" },
-  FinanceReviewButton: {
+  reviewButton: {
     backgroundColor: "#fff",
     paddingHorizontal: 16,
     paddingVertical: 6,
-    borderRadius: 20,
     borderColor: "#ccc",
     borderWidth: 1,
   },
-  FinanceReviewButtonText: { fontWeight: "bold", color: "#333" },
+  reviewButtonText: { fontWeight: "bold", color: "#333" },
   metaRow: {
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderColor: "#E0E0E0",
+    borderColor: "#eee",
+    fontWeight: "bold"
   },
   metaInfoRow: {
     flexDirection: "row",
@@ -246,7 +323,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  status: { fontSize: 13, fontWeight: "600", color: "#00CC99", marginRight: 12 },
+  status: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#00CC99",
+    marginRight: 12,
+  },
   distance: { fontSize: 13, color: "#333" },
   ratingRow: { flexDirection: "row", marginBottom: 6 },
   tagsRow: {
@@ -288,10 +370,11 @@ const styles = StyleSheet.create({
   },
   description: {
     paddingHorizontal: 16,
-    fontSize: 13,
+    fontSize: 15,
     lineHeight: 20,
     color: "#333",
-    marginBottom: 8,
+    marginBottom: -5,
+    marginTop: 24,
   },
   subTitle: {
     fontSize: 16,
@@ -307,7 +390,7 @@ const styles = StyleSheet.create({
   },
   mapContainer: {
     marginHorizontal: 16,
-    marginTop: 8,
+    marginTop: 25,
     height: 200,
     borderRadius: 12,
     overflow: "hidden",
@@ -316,6 +399,75 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 12,
   },
+  imageScrollContainer: {
+    paddingHorizontal: 16,
+    marginBottom: 16,
+  },
+
+  scrollImage: {
+    width: 200,
+    height: 140,
+    borderRadius: 16,
+    marginRight: 12,
+  },
+  customGallery: {
+    paddingHorizontal: 16,
+    marginBottom: 16,
+    flexDirection: "row",
+  },
+
+  largeImage: {
+    width: 200,
+    height: 200,
+    borderRadius: 16,
+    marginRight: 12,
+  },
+
+  smallImageGroup: {
+    flexDirection: "column",
+    justifyContent: "space-between",
+    marginRight: 12,
+  },
+
+  smallImage: {
+    width: 90,
+    height: 90,
+    borderRadius: 12,
+    marginBottom: 8,
+  },
+  centerSection: {
+    alignItems: "center",
+    marginTop: 16,
+    marginBottom: 24,
+    paddingHorizontal: 16,
+  },
+
+  mantraBox: {
+    backgroundColor: "#fff",
+    padding: 16,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+  },
+
+  mantraText: {
+    fontSize: 14,
+    color: "#000",
+    textAlign: "center",
+    lineHeight: 20,
+    marginBottom: 6,
+  },
+  sectionTitle: {
+    paddingHorizontal: 16,
+    fontSize: 15,
+    lineHeight: 20,
+    color: "#333",
+    marginBottom: 8,
+    marginTop: 20,
+  },
 });
 
 export default FinanceDetail;
+
+
